@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 // Get the __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -15,14 +15,12 @@ const photosFolderPath = path.join(__dirname, 'photos');
 
 // Serve static files with specific CORS headers
 app.use('/photos', (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Origin", "*");
   next();
 }, express.static(photosFolderPath));
 
 // Configure CORS to allow requests from http://localhost:5173
-app.use(cors({
-  origin: 'http://localhost:5173'
-}));
+app.use(cors());
 
 app.get('/api/photos', async (req, res) => {
   try {
